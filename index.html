@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>grass demo</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: system-ui, sans-serif;
+        background: #10251b;
+        color: #f0fdf4;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+      }
+
+      main {
+        width: min(32rem, calc(100% - 4rem));
+        padding: 2rem;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 8vw, 4rem);
+        margin-bottom: 0.5rem;
+      }
+
+      p {
+        line-height: 1.6;
+      }
+
+      .count {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+      }
+
+      button {
+        font: inherit;
+        font-weight: 600;
+        padding: 0.75rem 1.25rem;
+        border: 2px solid #86efac;
+        border-radius: 0.5rem;
+        background: #86efac;
+        color: #10251b;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #bbf7d0;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #f0fdf4;
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Welcome to grass</h1>
+      <p>A tiny playground for GitHub CLI demonstrations. Plant some virtual grass!</p>
+      <p class="count" role="status" aria-live="polite" aria-atomic="true">
+        Blades planted: <span id="count">0</span>
+      </p>
+      <div class="actions">
+        <button id="plant" type="button">Plant a blade</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <noscript><p>Enable JavaScript to use the planting counter.</p></noscript>
+      <p>For demonstration purposes only. Not intended for production use.</p>
+    </main>
+    <script>
+      const count = document.getElementById("count");
+      let blades = 0;
+
+      document.getElementById("plant").addEventListener("click", () => {
+        blades += 1;
+        count.textContent = String(blades);
+      });
+
+      document.getElementById("reset").addEventListener("click", () => {
+        blades = 0;
+        count.textContent = String(blades);
+      });
+    </script>
+  </body>
+</html>
