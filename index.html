@@ -6,10 +6,42 @@
     <title>grass demo</title>
     <style>
       :root {
-        color-scheme: light dark;
+        --bg: #10251b;
+        --text: #f0fdf4;
+        --garden-bg: #173d29;
+        --garden-border: #86efac;
+        --button-bg: #86efac;
+        --button-border: #86efac;
+        --button-text: #10251b;
+        --button-hover-bg: #bbf7d0;
+        --focus: #f0fdf4;
+        color-scheme: dark;
         font-family: system-ui, sans-serif;
-        background: #10251b;
-        color: #f0fdf4;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      :root[data-theme="light"] {
+        --bg: #f0fdf4;
+        --text: #10251b;
+        --garden-bg: #dcfce7;
+        --garden-border: #15803d;
+        --button-bg: #166534;
+        --button-border: #166534;
+        --button-text: #f0fdf4;
+        --button-hover-bg: #14532d;
+        --focus: #10251b;
+        color-scheme: light;
+      }
+
+      .theme-toggle-wrap {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .theme-toggle {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
       }
 
       body {
@@ -55,9 +87,9 @@
         min-height: 6rem;
         margin-top: 1.5rem;
         padding: 1.5rem;
-        border: 2px dashed #86efac;
+        border: 2px dashed var(--garden-border);
         border-radius: 0.75rem;
-        background: #173d29;
+        background: var(--garden-bg);
       }
 
       .garden:empty::before {
@@ -75,25 +107,28 @@
         font: inherit;
         font-weight: 600;
         padding: 0.75rem 1.25rem;
-        border: 2px solid #86efac;
+        border: 2px solid var(--button-border);
         border-radius: 0.5rem;
-        background: #86efac;
-        color: #10251b;
+        background: var(--button-bg);
+        color: var(--button-text);
         cursor: pointer;
       }
 
       button:hover {
-        background: #bbf7d0;
+        background: var(--button-hover-bg);
       }
 
       button:focus-visible {
-        outline: 3px solid #f0fdf4;
+        outline: 3px solid var(--focus);
         outline-offset: 4px;
       }
     </style>
   </head>
   <body>
     <main>
+      <div class="theme-toggle-wrap">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">Light theme</button>
+      </div>
       <h1>Welcome to grass</h1>
       <p>A tiny playground for GitHub CLI demonstrations. Grow your own virtual garden!</p>
       <p>Each click plants a random leafy plant, cactus, sunflower, or succulent.</p>
@@ -109,6 +144,13 @@
       <p>For demonstration purposes only. Not intended for production use.</p>
     </main>
     <script>
+      const themeToggle = document.getElementById("theme-toggle");
+      themeToggle.addEventListener("click", () => {
+        const light = themeToggle.getAttribute("aria-pressed") !== "true";
+        document.documentElement.dataset.theme = light ? "light" : "dark";
+        themeToggle.setAttribute("aria-pressed", String(light));
+      });
+
       const count = document.getElementById("count");
       const garden = document.getElementById("garden");
       const plants = [
