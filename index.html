@@ -96,6 +96,7 @@
     <main>
       <h1>Welcome to grass</h1>
       <p>A tiny playground for GitHub CLI demonstrations. Grow your own virtual garden!</p>
+      <p>Each click plants a random leafy plant, cactus, sunflower, or succulent.</p>
       <p class="count" role="status" aria-live="polite" aria-atomic="true">
         Plants planted: <span id="count">0</span>
       </p>
@@ -110,11 +111,18 @@
     <script>
       const count = document.getElementById("count");
       const garden = document.getElementById("garden");
+      const plants = [
+        { src: "plant.svg", alt: "A leafy green plant in a terracotta pot" },
+        { src: "cactus.svg", alt: "A green cactus in a terracotta pot" },
+        { src: "sunflower.svg", alt: "A yellow sunflower in a terracotta pot" },
+        { src: "succulent.svg", alt: "A rosette succulent in a terracotta pot" },
+      ];
 
       document.getElementById("plant").addEventListener("click", () => {
+        const variety = plants[Math.floor(Math.random() * plants.length)];
         const plant = document.createElement("img");
-        plant.src = "plant.svg";
-        plant.alt = "A leafy green plant in a terracotta pot";
+        plant.src = variety.src;
+        plant.alt = variety.alt;
         plant.width = 80;
         plant.height = 96;
         garden.appendChild(plant);
