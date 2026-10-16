@@ -10,8 +10,10 @@ It is not intended for production use.
 Open [index.html](index.html) in your browser. No dependencies, installation, or
 build step are required.
 
-Click **Plant a blade** to increase the virtual grass counter, or **Reset** to
-start over. Both buttons also work with keyboard navigation.
+Click **Plant a seedling** to add a plant image to your virtual garden, or
+**Reset** to clear the garden and counter. Both buttons also work with keyboard
+navigation. Plant images are included in the repository, so the app works offline;
+keep `plant.svg` alongside `index.html`.
 
 To serve the app locally instead, run this command from the repository directory:
 

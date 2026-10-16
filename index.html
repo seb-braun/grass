@@ -46,6 +46,31 @@
         gap: 0.75rem;
       }
 
+      .garden {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        justify-content: center;
+        gap: 1rem;
+        min-height: 6rem;
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        border: 2px dashed #86efac;
+        border-radius: 0.75rem;
+        background: #173d29;
+      }
+
+      .garden:empty::before {
+        content: "Your garden is empty. Plant a seedling to get started!";
+        align-self: center;
+        line-height: 1.6;
+      }
+
+      .garden img {
+        max-width: 100%;
+        height: auto;
+      }
+
       button {
         font: inherit;
         font-weight: 600;
@@ -70,29 +95,35 @@
   <body>
     <main>
       <h1>Welcome to grass</h1>
-      <p>A tiny playground for GitHub CLI demonstrations. Plant some virtual grass!</p>
+      <p>A tiny playground for GitHub CLI demonstrations. Grow your own virtual garden!</p>
       <p class="count" role="status" aria-live="polite" aria-atomic="true">
-        Blades planted: <span id="count">0</span>
+        Plants planted: <span id="count">0</span>
       </p>
       <div class="actions">
-        <button id="plant" type="button">Plant a blade</button>
+        <button id="plant" type="button">Plant a seedling</button>
         <button id="reset" type="button">Reset</button>
       </div>
-      <noscript><p>Enable JavaScript to use the planting counter.</p></noscript>
+      <div id="garden" class="garden" role="group" aria-label="Your garden"></div>
+      <noscript><p>Enable JavaScript to plant seedlings in the garden.</p></noscript>
       <p>For demonstration purposes only. Not intended for production use.</p>
     </main>
     <script>
       const count = document.getElementById("count");
-      let blades = 0;
+      const garden = document.getElementById("garden");
 
       document.getElementById("plant").addEventListener("click", () => {
-        blades += 1;
-        count.textContent = String(blades);
+        const plant = document.createElement("img");
+        plant.src = "plant.svg";
+        plant.alt = "A leafy green plant in a terracotta pot";
+        plant.width = 80;
+        plant.height = 96;
+        garden.appendChild(plant);
+        count.textContent = String(garden.childElementCount);
       });
 
       document.getElementById("reset").addEventListener("click", () => {
-        blades = 0;
-        count.textContent = String(blades);
+        garden.replaceChildren();
+        count.textContent = "0";
       });
     </script>
   </body>
