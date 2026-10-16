@@ -66,6 +66,13 @@
         line-height: 1.6;
       }
 
+      .storage-message {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        border: 2px solid #fcd34d;
+        border-radius: 0.5rem;
+      }
+
       .garden img {
         max-width: 100%;
         height: auto;
@@ -105,6 +112,7 @@
         <button id="reset" type="button">Reset</button>
       </div>
       <div id="garden" class="garden" role="group" aria-label="Your garden"></div>
+      <p id="storage-message" class="storage-message" role="alert" hidden></p>
       <noscript><p>Enable JavaScript to plant seedlings in the garden.</p></noscript>
       <p>For demonstration purposes only. Not intended for production use.</p>
     </main>
@@ -118,21 +126,85 @@
         { src: "succulent.svg", alt: "A rosette succulent in a terracotta pot" },
       ];
 
-      document.getElementById("plant").addEventListener("click", () => {
-        const variety = plants[Math.floor(Math.random() * plants.length)];
+      const storageKey = "grass-demo:garden";
+      const storageVersion = 1;
+      const storageMessage = document.getElementById("storage-message");
+      const varieties = new Map(plants.map((plant) => [plant.src, plant]));
+      let plantedVarieties = [];
+
+      function showStorageMessage(message) {
+        storageMessage.textContent = message;
+        storageMessage.hidden = false;
+      }
+
+      function addPlant(variety) {
         const plant = document.createElement("img");
         plant.src = variety.src;
         plant.alt = variety.alt;
         plant.width = 80;
         plant.height = 96;
         garden.appendChild(plant);
-        count.textContent = String(garden.childElementCount);
+      }
+
+      function render() {
+        garden.replaceChildren();
+        plantedVarieties.forEach((src) => addPlant(varieties.get(src)));
+        count.textContent = String(plantedVarieties.length);
+      }
+
+      function saveGarden() {
+        try {
+          if (plantedVarieties.length === 0) {
+            localStorage.removeItem(storageKey);
+          } else {
+            localStorage.setItem(storageKey, JSON.stringify({ version: storageVersion, plants: plantedVarieties }));
+          }
+        } catch {
+          showStorageMessage("Your garden can't be saved in this browser, so it will be lost when you reload the page.");
+        }
+      }
+
+      function loadGarden() {
+        let saved;
+        try {
+          saved = localStorage.getItem(storageKey);
+        } catch {
+          showStorageMessage("Your garden can't be saved in this browser, so it will be lost when you reload the page.");
+          return;
+        }
+        if (saved === null) return;
+
+        try {
+          const data = JSON.parse(saved);
+          if (
+            data?.version !== storageVersion ||
+            !Array.isArray(data.plants) ||
+            !data.plants.every((src) => typeof src === "string" && varieties.has(src))
+          ) {
+            throw new Error("Invalid saved garden");
+          }
+          plantedVarieties = data.plants;
+        } catch {
+          showStorageMessage("Your saved garden couldn't be restored, so you're starting with an empty garden.");
+        }
+      }
+
+      document.getElementById("plant").addEventListener("click", () => {
+        const variety = plants[Math.floor(Math.random() * plants.length)];
+        plantedVarieties.push(variety.src);
+        addPlant(variety);
+        count.textContent = String(plantedVarieties.length);
+        saveGarden();
       });
 
       document.getElementById("reset").addEventListener("click", () => {
-        garden.replaceChildren();
-        count.textContent = "0";
+        plantedVarieties = [];
+        render();
+        saveGarden();
       });
+
+      loadGarden();
+      render();
     </script>
   </body>
 </html>
