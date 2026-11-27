@@ -1,0 +1,16 @@
+[project]
+name = "grass-demo-tests"
+version = "0.1.0"
+description = "Browser smoke tests for the grass demo app"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+test = [
+    "playwright==1.64.0",
+    "pytest==8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
